@@ -65,4 +65,36 @@ public class DateUtils {
     public static LocalDateTime fromEpochTime(long timestamp) {
         return LocalDateTime.ofEpochSecond(timestamp, 0, ZoneOffset.ofHours(KST_OFFSET));
     }
+
+    public static long parseMinEpochSecond(String yyyymmdd) {
+        String tmp = UtilManager.onlyNumber(yyyymmdd);
+        if (tmp.length() != 8) {
+            throw new ApiException("yyyymmdd 8자리 날짜 포맷이 필요합니다.");
+        }
+
+        int year = Integer.valueOf(tmp.substring(0, 4));
+        int month = Integer.valueOf(tmp.substring(4, 6));
+        int day = Integer.valueOf(tmp.substring(6, 8));
+
+        LocalDate localDate = LocalDate.of(year, month, day);
+
+        return LocalDateTime.of(localDate, LocalTime.MIN)
+                .toEpochSecond(ZoneOffset.ofHours(KST_OFFSET));
+    }
+
+    public static long parseMaxEpochSecond(String yyyymmdd) {
+        String tmp = UtilManager.onlyNumber(yyyymmdd);
+        if (tmp.length() != 8) {
+            throw new ApiException("yyyymmdd 8자리 날짜 포맷이 필요합니다.");
+        }
+
+        int year = Integer.valueOf(tmp.substring(0, 4));
+        int month = Integer.valueOf(tmp.substring(4, 6));
+        int day = Integer.valueOf(tmp.substring(6, 8));
+
+        LocalDate localDate = LocalDate.of(year, month, day);
+
+        return LocalDateTime.of(localDate, LocalTime.MAX)
+                .toEpochSecond(ZoneOffset.ofHours(KST_OFFSET));
+    }
 }

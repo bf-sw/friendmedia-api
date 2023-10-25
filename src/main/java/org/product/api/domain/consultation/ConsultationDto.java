@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.product.api.base.BaseDto;
 import org.product.api.code.LoginType;
+import org.product.common.DateUtils;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -81,10 +82,16 @@ public class ConsultationDto {
     @ApiModel("ConsultationDto-SearchForm")
     public static class SearchForm extends BaseDto {
         @ApiModelProperty(value = "상담일자 시작일")
-        Long startDate;
+        String startDate;
 
         @ApiModelProperty(value = "상담일자 종료일")
-        Long endDate;
+        String endDate;
+
+        @ApiModelProperty(value = "상담일자 시작일", hidden = true)
+        long startDateTime;
+
+        @ApiModelProperty(value = "상담일자 종료일", hidden = true)
+        long endDateTime;
 
         @ApiModelProperty(value = "고객명")
         String name;
@@ -118,12 +125,16 @@ public class ConsultationDto {
             BooleanBuilder where = new BooleanBuilder();
 
             if (isNotNull(startDate) && isNotNull(endDate)) {
-                where.and(consultation.consultDate.goe(startDate)
-                        .and(consultation.consultDate.loe(endDate)));
+                startDateTime = DateUtils.parseMinEpochSecond(startDate.replaceAll("-", ""));
+                endDateTime = DateUtils.parseMaxEpochSecond(endDate.replaceAll("-", ""));
+                where.and(consultation.consultDate.goe(startDateTime)
+                        .and(consultation.consultDate.loe(endDateTime)));
             } else if (isNotNull(startDate) && isNull(endDate)) {
-                where.and(consultation.consultDate.goe(startDate));
+                startDateTime = DateUtils.parseMinEpochSecond(startDate.replaceAll("-", ""));
+                where.and(consultation.consultDate.goe(startDateTime));
             } else if (isNull(startDate) && isNotNull(endDate)) {
-                where.and(consultation.consultDate.loe(endDate));
+                endDateTime = DateUtils.parseMaxEpochSecond(endDate.replaceAll("-", ""));
+                where.and(consultation.consultDate.loe(endDateTime));
             }
 
             if (isNotEmpty(name)) where.and(consultation.name.contains(name));
