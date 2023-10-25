@@ -58,12 +58,12 @@ public class ConsultationController extends BaseController {
                                                                @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
                                                                @RequestParam(value = "sort", defaultValue = "id", required = false) String sort) {
 
-        log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][search][REQ]", condition.toString());
+        log.info("[CONSULTATION][SERVICE][ConsultationService][search][REQ]", condition.toString());
 
         PageRequest pageable = PageRequest.of(page, size, Sort.Direction.DESC, sort);
         Page<ConsultationDto.BasicInfo> result = consultationService.search(condition, pageable);
 
-        log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][search][RES]", result.getContent().toString());
+        log.info("[CONSULTATION][SERVICE][ConsultationService][search][RES]", result.getContent().toString());
 
         return ApiResponse.ok(result);
     }
@@ -72,11 +72,11 @@ public class ConsultationController extends BaseController {
     @GetMapping(value = "/v1/{consultationId}/detail", produces = APPLICATION_JSON)
     public ApiResponse<ConsultationDto.BasicInfo> detail(@NotNull(message = "상담이력 아이디는 필수 입니다.") @PathVariable(name = "consultationId") Long consultationId) {
 
-        log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][detail][REQ]", consultationId);
+        log.info("[CONSULTATION][SERVICE][ConsultationService][detail][REQ]", consultationId);
 
         ConsultationDto.BasicInfo result = consultationService.detail(consultationId);
 
-        log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][detail][RES]", result.getContent().toString());
+        log.info("[CONSULTATION][SERVICE][ConsultationService][detail][RES]", result.getContent().toString());
 
         return ApiResponse.ok(result);
     }
