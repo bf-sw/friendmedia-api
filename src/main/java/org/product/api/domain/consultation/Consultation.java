@@ -56,7 +56,7 @@ public class Consultation {
     private String content;
 
     @Column
-    private String consultDate;
+    private Long consultDate;
 
     @Column
     private String department;

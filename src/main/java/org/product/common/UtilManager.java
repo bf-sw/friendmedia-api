@@ -2,6 +2,7 @@ package org.product.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
 
@@ -49,5 +50,9 @@ public class UtilManager {
             return Pattern.matches(PASSWORD_PATTERN_WIDTH_NUMBER, password);
         }
         return false;
+    }
+
+    public static String onlyNumber(String str) {
+        return StringUtils.replace(str, "[^0-9]", "");
     }
 }
