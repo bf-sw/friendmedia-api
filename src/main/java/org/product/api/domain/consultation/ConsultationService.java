@@ -47,6 +47,7 @@ public class ConsultationService extends BaseService {
                     .setDeleted(false);
 
             consultationRepository.save(consultation);
+
         } catch (ApiException e) {
             log.error("[CONSULTATION][SERVICE][ConsultationService][registConsultation][ERROR]");
             e.printStackTrace();
