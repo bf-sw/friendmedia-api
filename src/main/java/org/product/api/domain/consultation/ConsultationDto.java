@@ -70,6 +70,14 @@ public class ConsultationDto {
     @Data
     @Accessors(chain = true)
     @NoArgsConstructor
+    @ApiModel("ConsultationDto-DeleteForm")
+    public static class DeleteForm {
+        private long id;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @NoArgsConstructor
     @ApiModel("ConsultationDto-SearchForm")
     public static class SearchForm extends BaseDto {
         @ApiModelProperty(value = "상담일자 시작일")

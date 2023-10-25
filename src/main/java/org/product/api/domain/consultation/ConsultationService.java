@@ -76,7 +76,7 @@ public class ConsultationService extends BaseService {
             Optional<Consultation> consultationOptional = consultationRepository.findById(form.getId());
 
             if (Objects.isNull(consultationOptional)) {
-                throw new ApiException("조회 가능한 상담이력이 없습니다.");
+                throw new ApiException("수정 가능한 상담이력이 없습니다.");
             }
 
             Consultation consultation = consultationOptional.get();
@@ -111,6 +111,45 @@ public class ConsultationService extends BaseService {
             throw e;
         } catch (Exception e) {
             log.error("[CONSULTATION][SERVICE][ConsultationService][updateConsultation][ERROR]");
+            e.printStackTrace();
+            throw new ApiException(ResponseStatus.ERROR);
+        }
+    }
+
+    /*
+     * 상담이력 삭제
+     * */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteConsultation(ConsultationDto.DeleteForm form) {
+
+        try {
+            log.info("[CONSULTATION][SERVICE][ConsultationService][deleteConsultation][form]", form.toString());
+
+            Optional<Consultation> consultationOptional = consultationRepository.findById(form.getId());
+
+            if (Objects.isNull(consultationOptional)) {
+                throw new ApiException("삭제 가능한 상담이력이 없습니다.");
+            }
+
+            Consultation consultation = consultationOptional.get();
+
+            if (consultation.isDeleted()) {
+                throw new ApiException("이미 삭제된 상담이력입니다.");
+            }
+
+            consultation
+                    .setDeletedAt(DateUtils.getNow())
+                    .setDeletedBy(getName())
+                    .setDeleted(true);
+
+            consultationRepository.save(consultation);
+
+        } catch (ApiException e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][deleteConsultation][ERROR]");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][deleteConsultation][ERROR]");
             e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }

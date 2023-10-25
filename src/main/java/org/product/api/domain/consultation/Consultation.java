@@ -84,5 +84,11 @@ public class Consultation {
     private String modifiedBy;
 
     @Column
+    private Long deletedAt;
+
+    @Column
+    private String deletedBy;
+
+    @Column
     private boolean deleted;
 }
