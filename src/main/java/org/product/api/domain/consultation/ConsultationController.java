@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @RestController
@@ -69,10 +70,9 @@ public class ConsultationController extends BaseController {
 
     @ApiOperation(value = "상담 이력 상세 조회", notes = "상담 이력 상세 조회")
     @GetMapping(value = "/v1/{consultationId}/detail", produces = APPLICATION_JSON)
-    public ApiResponse<ConsultationDto.BasicInfo> detail(@Valid @PathVariable(name = "consultationId") Long consultationId) {
+    public ApiResponse<ConsultationDto.BasicInfo> detail(@NotNull(message = "상담이력 아이디는 필수 입니다.") @PathVariable(name = "consultationId") Long consultationId) {
 
         log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][detail][REQ]", consultationId);
-
 
         ConsultationDto.BasicInfo result = consultationService.detail(consultationId);
 
