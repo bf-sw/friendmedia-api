@@ -24,8 +24,6 @@ public class ConsultationService extends BaseService {
     public void registConsultation(ConsultationDto.RegistryForm form) {
 
         try {
-            checkSecretKey();
-
             Consultation consultation = new Consultation();
             consultation
                     .setName(form.getName())
