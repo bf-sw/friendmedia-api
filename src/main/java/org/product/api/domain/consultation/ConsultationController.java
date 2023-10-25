@@ -67,4 +67,18 @@ public class ConsultationController extends BaseController {
         return ApiResponse.ok(result);
     }
 
+    @ApiOperation(value = "상담 이력 상세 조회", notes = "상담 이력 상세 조회")
+    @GetMapping(value = "/v1/{consultationId}/detail", produces = APPLICATION_JSON)
+    public ApiResponse<ConsultationDto.BasicInfo> detail(@Valid @PathVariable(name = "consultationId") Long consultationId) {
+
+        log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][detail][REQ]", consultationId);
+
+
+        ConsultationDto.BasicInfo result = consultationService.detail(consultationId);
+
+        log.info("[CONSULTATION][SERVICE][ConsultationService][registConsultation][detail][RES]", result.getContent().toString());
+
+        return ApiResponse.ok(result);
+    }
+
 }

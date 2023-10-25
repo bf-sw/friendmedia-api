@@ -75,7 +75,7 @@ public class ConsultationService extends BaseService {
 
             Optional<Consultation> consultationOptional = consultationRepository.findById(form.getId());
 
-            if (Objects.isNull(consultationOptional)) {
+            if (!consultationOptional.isPresent()) {
                 throw new ApiException("수정 가능한 상담이력이 없습니다.");
             }
 
@@ -127,7 +127,7 @@ public class ConsultationService extends BaseService {
 
             Optional<Consultation> consultationOptional = consultationRepository.findById(form.getId());
 
-            if (Objects.isNull(consultationOptional)) {
+            if (!consultationOptional.isPresent()) {
                 throw new ApiException("삭제 가능한 상담이력이 없습니다.");
             }
 
@@ -155,6 +155,9 @@ public class ConsultationService extends BaseService {
         }
     }
 
+    /*
+     * 상담이력 목록 조회
+     * */
     public Page<ConsultationDto.BasicInfo> search(ConsultationDto.SearchForm condition, PageRequest pageable) {
 
         try {
@@ -166,6 +169,36 @@ public class ConsultationService extends BaseService {
             throw e;
         } catch (Exception e) {
             log.error("[CONSULTATION][SERVICE][ConsultationService][search][ERROR]");
+            e.printStackTrace();
+            throw new ApiException(ResponseStatus.ERROR);
+        }
+    }
+
+    /*
+     * 상담이력 상세 조회
+     * */
+    public ConsultationDto.BasicInfo detail(long consultationId) {
+
+        try {
+            Optional<Consultation> consultationOptional = consultationRepository.findById(consultationId);
+
+            if (!consultationOptional.isPresent()) {
+                throw new ApiException("조회 가능한 상담이력이 없습니다.");
+            }
+
+            Consultation consultation = consultationOptional.get();
+
+            if (consultation.isDeleted()) {
+                throw new ApiException("이미 삭제된 상담이력입니다.");
+            }
+
+            return toBasicInfo(consultation);
+        } catch (ApiException e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][detail][ERROR]");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][detail][ERROR]");
             e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }
