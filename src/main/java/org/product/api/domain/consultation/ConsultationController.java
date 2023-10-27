@@ -8,11 +8,13 @@ import org.product.common.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -79,6 +81,16 @@ public class ConsultationController extends BaseController {
         log.info("[CONSULTATION][SERVICE][ConsultationService][detail][RES]", result.getContent().toString());
 
         return ApiResponse.ok(result);
+    }
+
+    @ApiOperation(value = "엑셀 다운로드용 상담 이력 목록 조회", notes = "엑셀 다운로드용 상담 이력 목록 조회")
+    @GetMapping(value = "/v1/excel", produces = APPLICATION_JSON)
+    public ApiResponse<List<ConsultationDto.BasicInfo>> excel(ConsultationDto.SearchForm form) {
+
+        Pageable wholePage = Pageable.unpaged();
+        List<ConsultationDto.BasicInfo> results = consultationService.excel(form, wholePage);
+
+        return ApiResponse.ok(results);
     }
 
 }

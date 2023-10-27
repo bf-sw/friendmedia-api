@@ -8,12 +8,15 @@ import org.product.exception.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -199,6 +202,25 @@ public class ConsultationService extends BaseService {
             throw e;
         } catch (Exception e) {
             log.error("[CONSULTATION][SERVICE][ConsultationService][detail][ERROR]");
+            e.printStackTrace();
+            throw new ApiException(ResponseStatus.ERROR);
+        }
+    }
+
+    /*
+     * 엑셀 생성용 상담이력 목록 조회
+     * */
+    public List<ConsultationDto.BasicInfo> excel(ConsultationDto.SearchForm form, Pageable wholePage) {
+
+        try {
+            Page<Consultation> goods = consultationRepository.findAll(form.getCondition(), wholePage);
+            return goods.getContent().stream().map(this::toBasicInfo).sorted(Comparator.comparing(ConsultationDto.BasicInfo::getCreatedAt)).collect(Collectors.toList());
+        } catch (ApiException e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][search][ERROR]");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][search][ERROR]");
             e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }
