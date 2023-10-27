@@ -122,15 +122,15 @@ public class ConsultationDto {
             QConsultation consultation = QConsultation.consultation;
             BooleanBuilder where = new BooleanBuilder();
 
-            if (isNotNull(startDate) && isNotNull(endDate)) {
+            if (isNotEmpty(startDate) && isNotEmpty(endDate)) {
                 startDateTime = DateUtils.parseMinEpochSecond(startDate.replaceAll("-", ""));
                 endDateTime = DateUtils.parseMaxEpochSecond(endDate.replaceAll("-", ""));
                 where.and(consultation.consultDate.goe(startDateTime)
                         .and(consultation.consultDate.loe(endDateTime)));
-            } else if (isNotNull(startDate) && isNull(endDate)) {
+            } else if (isNotEmpty(startDate) && isEmpty(endDate)) {
                 startDateTime = DateUtils.parseMinEpochSecond(startDate.replaceAll("-", ""));
                 where.and(consultation.consultDate.goe(startDateTime));
-            } else if (isNull(startDate) && isNotNull(endDate)) {
+            } else if (isEmpty(startDate) && isNotEmpty(endDate)) {
                 endDateTime = DateUtils.parseMaxEpochSecond(endDate.replaceAll("-", ""));
                 where.and(consultation.consultDate.loe(endDateTime));
             }
