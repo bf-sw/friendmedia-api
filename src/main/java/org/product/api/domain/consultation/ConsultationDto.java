@@ -44,11 +44,9 @@ public class ConsultationDto {
         private String consultType;
 
         @ApiModelProperty(value = "상담유형 대분류", notes = "", example = "", required = true)
-        @NotEmpty(message = "상담유형 대분류를 입력해주세요.")
         private String level1;
 
         @ApiModelProperty(value = "상담유형 중분류", notes = "", example = "", required = true)
-        @NotEmpty(message = "상담유형 중분류를 입력해주세요.")
         private String level2;
 
         @ApiModelProperty(value = "상담이력", notes = "", example = "", required = true)

@@ -216,11 +216,11 @@ public class ConsultationService extends BaseService {
             Page<Consultation> goods = consultationRepository.findAll(form.getCondition(), wholePage);
             return goods.getContent().stream().map(this::toBasicInfo).sorted(Comparator.comparing(ConsultationDto.BasicInfo::getCreatedAt)).collect(Collectors.toList());
         } catch (ApiException e) {
-            log.error("[CONSULTATION][SERVICE][ConsultationService][search][ERROR]");
+            log.error("[CONSULTATION][SERVICE][ConsultationService][excel][ERROR]");
             e.printStackTrace();
             throw e;
         } catch (Exception e) {
-            log.error("[CONSULTATION][SERVICE][ConsultationService][search][ERROR]");
+            log.error("[CONSULTATION][SERVICE][ConsultationService][excel][ERROR]");
             e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }
