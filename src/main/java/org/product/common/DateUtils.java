@@ -10,6 +10,8 @@ public class DateUtils {
         return Instant.now().getEpochSecond();
     }
 
+    public static LocalDate getNowForLocalDate() { return LocalDate.now(); }
+
     public static long getPlusMinute(int minute) {
         LocalDateTime now = LocalDateTime.now();
         return now.plusMinutes(minute).toEpochSecond(ZoneOffset.ofHours(KST_OFFSET));

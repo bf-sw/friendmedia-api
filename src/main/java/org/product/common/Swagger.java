@@ -28,25 +28,7 @@ import java.util.List;
 public class Swagger extends WebMvcConfigurerAdapter {
     @Bean
     public Docket api() {
-        ParameterBuilder codeHeader = new ParameterBuilder();
-        codeHeader.name("code") //헤더 이름
-                .description("코드") //설명
-                .modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false)
-                .build();
-
-        ParameterBuilder keyHeader = new ParameterBuilder();
-        keyHeader.name("key") //헤더 이름
-                .description("키") //설명
-                .modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false)
-                .build();
-
         List<Parameter> parameters = new ArrayList<>();
-        parameters.add(codeHeader.build());
-        parameters.add(keyHeader.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .globalOperationParameters(parameters)

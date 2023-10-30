@@ -115,6 +115,9 @@ public class ConsultationDto {
         @ApiModelProperty(value = "상담유형 중분류")
         String level2;
 
+        @ApiModelProperty(value = "상담사 명")
+        String counselorNm;
+
         @ApiModelProperty(value = "삭제여부")
         boolean deleted = false;
 
@@ -150,6 +153,8 @@ public class ConsultationDto {
             if (isNotEmpty(level1)) where.and(consultation.level1.eq(level1));
 
             if (isNotEmpty(level2)) where.and(consultation.level2.eq(level2));
+
+            if (isNotEmpty(counselorNm)) where.and(consultation.counselorNm.contains(counselorNm));
 
             where.and(consultation.deleted.eq(deleted));
             return where;

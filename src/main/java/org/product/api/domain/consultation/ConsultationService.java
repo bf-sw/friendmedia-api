@@ -2,6 +2,8 @@ package org.product.api.domain.consultation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.product.api.base.BaseService;
+import org.product.api.domain.admin.Admin;
+import org.product.api.domain.admin.AdminRepository;
 import org.product.common.DateUtils;
 import org.product.common.ResponseStatus;
 import org.product.exception.ApiException;
@@ -24,6 +26,9 @@ public class ConsultationService extends BaseService {
 
     @Autowired
     ConsultationRepository consultationRepository;
+
+    @Autowired
+    AdminRepository adminRepository;
 
     /*
      * 상담이력 등록
@@ -88,6 +93,15 @@ public class ConsultationService extends BaseService {
                 throw new ApiException("이미 삭제된 상담이력입니다.");
             }
 
+            long minTime = DateUtils.fromLocalDateMin(DateUtils.getNowForLocalDate());
+            long createTime = consultation.getCreatedAt();
+
+            // 상담이력은 본인이 작성한 상담이력만 수정 가능
+            // 당일 등록된 상담이력만 수정 가능
+            if (!consultation.getCounselorId().equals(getLoginId()) || createTime < minTime) {
+                throw new ApiException("상담이력은 금일 본인이 작성한 상담이력만 수정 가능합니다.");
+            }
+
             consultation
                     .setName(form.getName())
                     .setPhone(form.getPhone())
@@ -138,6 +152,13 @@ public class ConsultationService extends BaseService {
 
             if (consultation.isDeleted()) {
                 throw new ApiException("이미 삭제된 상담이력입니다.");
+            }
+
+            Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(getLoginId());
+
+            // 관리자로 등록된 상담사만 상담이력 삭제 가능
+            if (!admin.isPresent()) {
+                throw new ApiException("삭제 권한이 없습니다. 관리자에게 문의하시기 바랍니다.");
             }
 
             consultation
