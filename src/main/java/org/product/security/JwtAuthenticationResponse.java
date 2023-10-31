@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
+    private boolean admin;
     private String loginId;
     private String name;
     private String department;

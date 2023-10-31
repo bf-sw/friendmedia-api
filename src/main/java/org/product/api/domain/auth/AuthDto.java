@@ -57,6 +57,7 @@ public class AuthDto {
     @NoArgsConstructor
     @ApiModel("AuthDto-UserInfo")
     public static class UserInfo extends BaseDto {
+        boolean admin;
         LoginType loginType;
         String loginId;
         String password;

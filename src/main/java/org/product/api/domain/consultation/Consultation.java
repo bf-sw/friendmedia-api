@@ -72,6 +72,9 @@ public class Consultation {
     private String counselorNm;
 
     @Column
+    private boolean complaint;
+
+    @Column
     private Long createdAt;
 
     @Column

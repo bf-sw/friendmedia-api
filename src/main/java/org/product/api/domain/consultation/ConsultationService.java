@@ -55,6 +55,7 @@ public class ConsultationService extends BaseService {
                     .setCounselorType(getLoginType())
                     .setCounselorId(getLoginId())
                     .setCounselorNm(getName())
+                    .setComplaint(form.getComplaint())
                     .setCreatedAt(DateUtils.getNow())
                     .setCreatedBy(getName())
                     .setDeleted(false);
@@ -117,6 +118,7 @@ public class ConsultationService extends BaseService {
                     .setCounselorType(getLoginType())
                     .setCounselorId(getLoginId())
                     .setCounselorNm(getName())
+                    .setComplaint(form.getComplaint())
                     .setModifiedAt(DateUtils.getNow())
                     .setModifiedBy(getName());
 
@@ -267,6 +269,7 @@ public class ConsultationService extends BaseService {
                 .setDepartment(consultation.getDepartment())
                 .setCounselorId(consultation.getCounselorId())
                 .setCounselorNm(consultation.getCounselorNm())
+                .setComplaint(consultation.isComplaint())
                 .setCreatedAt(consultation.getCreatedAt())
                 .setCreatedBy(consultation.getCreatedBy())
                 .setModifiedAt(consultation.getModifiedAt())

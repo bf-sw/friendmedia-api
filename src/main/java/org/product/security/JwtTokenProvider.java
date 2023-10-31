@@ -37,6 +37,7 @@ public class JwtTokenProvider {
     @Data
     @Accessors(chain = true)
     public static class TokenFormat {
+        boolean admin;
         LoginType loginType;
         String loginId;
         String password;

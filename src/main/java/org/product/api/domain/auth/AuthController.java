@@ -58,7 +58,6 @@ public class AuthController extends BaseController {
     }
 
     private JwtAuthenticationResponse makeAuthResponse(AuthDto.UserInfo userInfo) {
-
         JwtTokenProvider.TokenFormat token = new JwtTokenProvider.TokenFormat();
 
         token.setLoginType(userInfo.getLoginType());
@@ -66,6 +65,7 @@ public class AuthController extends BaseController {
         token.setPassword(userInfo.getPassword());
         token.setName(userInfo.getName());
         token.setDepartment(userInfo.getDepartment());
+        token.setAdmin(userInfo.isAdmin());
 
         String accessToken = tokenProvider.generateToken(token, jwtExpiredMinutes);
 
@@ -73,6 +73,7 @@ public class AuthController extends BaseController {
 
         response
                 .setAccessToken(accessToken)
+                .setAdmin(userInfo.isAdmin())
                 .setLoginId(userInfo.getLoginId())
                 .setName(userInfo.getName())
                 .setDepartment(userInfo.getDepartment());

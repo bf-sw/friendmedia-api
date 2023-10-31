@@ -8,12 +8,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.product.api.base.BaseService;
 import org.product.api.code.LoginType;
+import org.product.api.domain.admin.Admin;
+import org.product.api.domain.admin.AdminRepository;
 import org.product.common.ResponseStatus;
 import org.product.common.UtilManager;
 import org.product.exception.ApiException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,6 +34,9 @@ public class AuthService extends BaseService {
 
     @Value("${bf.api.header.key}")
     private String bfServiceKey;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     public AuthDto.UserInfo gwLogin(AuthDto.LoginForm form) {
         try {
@@ -103,6 +110,10 @@ public class AuthService extends BaseService {
                 .setLoginId(response.getLoginId())
                 .setName(response.getName())
                 .setDepartment(response.getDeptName());
+
+        Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(response.getLoginId());
+
+        userInfo.setAdmin(admin.isPresent());
 
         return userInfo;
     }
