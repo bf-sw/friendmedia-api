@@ -182,6 +182,54 @@ public class ConsultationService extends BaseService {
     }
 
     /*
+     * 여러개 상담이력 삭제
+     * */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteMultiConsultation(ConsultationDto.DeleteMultiForm forms) {
+
+        try {
+            log.info("[CONSULTATION][SERVICE][ConsultationService][deleteMultiConsultation][forms]", forms.toString());
+
+            Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(getLoginId());
+
+            // 관리자로 등록된 상담사만 상담이력 삭제 가능
+            if (!admin.isPresent()) {
+                throw new ApiException("삭제 권한이 없습니다. 관리자에게 문의하시기 바랍니다.");
+            }
+
+            forms.getIds().stream().forEach(form -> {
+                long counselorId = form.getId();
+                Optional<Consultation> consultationOptional = consultationRepository.findById(counselorId);
+
+                if (!consultationOptional.isPresent()) {
+                    throw new ApiException("삭제 가능한 상담이력이 없습니다.");
+                }
+
+                Consultation consultation = consultationOptional.get();
+
+                if (consultation.isDeleted()) {
+                    throw new ApiException("이미 삭제된 상담이력입니다.");
+                }
+
+                consultation
+                        .setDeletedAt(DateUtils.getNow())
+                        .setDeletedBy(getName())
+                        .setDeleted(true);
+
+                consultationRepository.save(consultation);
+            });
+        } catch (ApiException e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][deleteMultiConsultation][ERROR]");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][deleteMultiConsultation][ERROR]");
+            e.printStackTrace();
+            throw new ApiException(ResponseStatus.ERROR);
+        }
+    }
+
+    /*
      * 상담이력 목록 조회
      * */
     public Page<ConsultationDto.BasicInfo> search(ConsultationDto.SearchForm condition, PageRequest pageable) {

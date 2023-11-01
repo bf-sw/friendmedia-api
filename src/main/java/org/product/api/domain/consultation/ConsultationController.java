@@ -53,6 +53,15 @@ public class ConsultationController extends BaseController {
         return ApiResponse.ok();
     }
 
+    @ApiOperation(value="상담 이력 멀티 삭제", notes = "상담 이력 멀티 삭제")
+    @PostMapping(value="/v1/multi/delete", produces = APPLICATION_JSON)
+    public ApiResponse deleteMultiConsultation(@Valid @RequestBody ConsultationDto.DeleteMultiForm forms) {
+
+        consultationService.deleteMultiConsultation(forms);
+
+        return ApiResponse.ok();
+    }
+
     @ApiOperation(value = "상담 이력 검색", notes = "상담 이력 검색")
     @GetMapping(value = "/v1/search", produces = APPLICATION_JSON)
     public ApiResponse<Page<ConsultationDto.BasicInfo>> search(@Valid @ModelAttribute ConsultationDto.SearchForm condition,

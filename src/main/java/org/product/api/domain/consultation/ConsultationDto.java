@@ -11,6 +11,8 @@ import org.product.api.code.LoginType;
 import org.product.common.DateUtils;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class ConsultationDto {
 
@@ -74,7 +76,19 @@ public class ConsultationDto {
     @NoArgsConstructor
     @ApiModel("ConsultationDto-DeleteForm")
     public static class DeleteForm {
+        @ApiModelProperty(value = "상담이력 아이디", notes = "", example = "", required = true)
+        @NotNull(message = "상담이력 아이디를 입력해주세요.")
         private long id;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @NoArgsConstructor
+    @ApiModel("ConsultationDto-DeleteMultiForm")
+    public static class DeleteMultiForm {
+        @ApiModelProperty(value = "상담이력 아이디", notes = "", example = "", required = true)
+        @NotNull(message = "상담이력 아이디를 입력해주세요.")
+        private List<DeleteForm> ids;
     }
 
     @Data
