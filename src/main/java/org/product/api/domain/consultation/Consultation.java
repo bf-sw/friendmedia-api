@@ -75,6 +75,9 @@ public class Consultation {
     private boolean complaint;
 
     @Column
+    private String consultStatus;
+
+    @Column
     private Long createdAt;
 
     @Column

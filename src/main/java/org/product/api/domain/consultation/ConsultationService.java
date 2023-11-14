@@ -56,6 +56,7 @@ public class ConsultationService extends BaseService {
                     .setCounselorId(getLoginId())
                     .setCounselorNm(getName())
                     .setComplaint(form.getComplaint())
+                    .setConsultStatus(form.getConsultStatus())
                     .setCreatedAt(DateUtils.getNow())
                     .setCreatedBy(getName())
                     .setDeleted(false);
@@ -98,9 +99,10 @@ public class ConsultationService extends BaseService {
             long createTime = consultation.getCreatedAt();
 
             // 상담이력은 본인이 작성한 상담이력만 수정 가능
-            // 당일 등록된 상담이력만 수정 가능
-            if (!consultation.getCounselorId().equals(getLoginId()) || createTime < minTime) {
-                throw new ApiException("상담이력은 금일 본인이 작성한 상담이력만 수정 가능합니다.");
+            // 당일 등록된 상담이력만 수정 가능 (해당기능 삭제 요청으로 주석처리)
+            if (!consultation.getCounselorId().equals(getLoginId())) {
+            //if (!consultation.getCounselorId().equals(getLoginId()) || createTime < minTime) {
+                throw new ApiException("상담이력은 본인이 작성한 상담이력만 수정 가능합니다.");
             }
 
             consultation
@@ -119,6 +121,7 @@ public class ConsultationService extends BaseService {
                     .setCounselorId(getLoginId())
                     .setCounselorNm(getName())
                     .setComplaint(form.getComplaint())
+                    .setConsultStatus(form.getConsultStatus())
                     .setModifiedAt(DateUtils.getNow())
                     .setModifiedBy(getName());
 
@@ -235,8 +238,8 @@ public class ConsultationService extends BaseService {
     public Page<ConsultationDto.BasicInfo> search(ConsultationDto.SearchForm condition, PageRequest pageable) {
 
         try {
-            Page<Consultation> goods = consultationRepository.findAll(condition.getCondition(), pageable);
-            return goods.map(this::toBasicInfo);
+            Page<Consultation> consultations = consultationRepository.findAll(condition.getCondition(), pageable);
+            return consultations.map(this::toBasicInfo);
         } catch (ApiException e) {
             log.error("[CONSULTATION][SERVICE][ConsultationService][search][ERROR]");
             e.printStackTrace();
@@ -284,8 +287,8 @@ public class ConsultationService extends BaseService {
     public List<ConsultationDto.BasicInfo> excel(ConsultationDto.SearchForm form, Pageable wholePage) {
 
         try {
-            Page<Consultation> goods = consultationRepository.findAll(form.getCondition(), wholePage);
-            return goods.getContent().stream().map(this::toBasicInfo).sorted(Comparator.comparing(ConsultationDto.BasicInfo::getCreatedAt)).collect(Collectors.toList());
+            Page<Consultation> consultations = consultationRepository.findAll(form.getCondition(), wholePage);
+            return consultations.getContent().stream().map(this::toBasicInfo).sorted(Comparator.comparing(ConsultationDto.BasicInfo::getCreatedAt)).collect(Collectors.toList());
         } catch (ApiException e) {
             log.error("[CONSULTATION][SERVICE][ConsultationService][excel][ERROR]");
             e.printStackTrace();
@@ -318,6 +321,7 @@ public class ConsultationService extends BaseService {
                 .setCounselorId(consultation.getCounselorId())
                 .setCounselorNm(consultation.getCounselorNm())
                 .setComplaint(consultation.isComplaint())
+                .setConsultStatus(consultation.getConsultStatus())
                 .setCreatedAt(consultation.getCreatedAt())
                 .setCreatedBy(consultation.getCreatedBy())
                 .setModifiedAt(consultation.getModifiedAt())

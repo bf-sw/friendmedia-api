@@ -61,6 +61,10 @@ public class ConsultationDto {
 
         @ApiModelProperty(value = "민원 발생 여부", notes = "", example = "1", required = false)
         private Boolean complaint;
+
+        @ApiModelProperty(value = "상담 진행 상태", notes = "", example = "", required = true)
+        @NotEmpty(message = "상담 진행 상태를 입력해주세요.")
+        private String consultStatus;
     }
 
     @Data
@@ -138,6 +142,9 @@ public class ConsultationDto {
         @ApiModelProperty(value = "민원 발생 여부")
         Boolean complaint;
 
+        @ApiModelProperty(value = "상담 진행 상태")
+        String consultStatus;
+
         @ApiModelProperty(value = "삭제여부")
         boolean deleted = false;
 
@@ -177,6 +184,8 @@ public class ConsultationDto {
             if (isNotEmpty(counselorNm)) where.and(consultation.counselorNm.contains(counselorNm));
 
             if (isNotNull(complaint)) where.and(consultation.complaint.eq(complaint));
+
+            if (isNotNull(consultStatus)) where.and(consultation.consultStatus.eq(consultStatus));
 
             where.and(consultation.deleted.eq(deleted));
             return where;
@@ -236,6 +245,9 @@ public class ConsultationDto {
 
         @ApiModelProperty(value = "민원 발생 여부", notes = "", example = "")
         private boolean complaint;
+
+        @ApiModelProperty(value = "상담 진행 상태", notes = "", example = "")
+        private String consultStatus;
 
         @ApiModelProperty(value = "등록일시", notes = "", example = "")
         private Long createdAt;
