@@ -98,11 +98,14 @@ public class ConsultationService extends BaseService {
             long minTime = DateUtils.fromLocalDateMin(DateUtils.getNowForLocalDate());
             long createTime = consultation.getCreatedAt();
 
+            Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(getLoginId());
+
             // 상담이력은 본인이 작성한 상담이력만 수정 가능
             // 당일 등록된 상담이력만 수정 가능 (해당기능 삭제 요청으로 주석처리)
-            if (!consultation.getCounselorId().equals(getLoginId())) {
+            // 관리자 수정 가능하도록 기능 수정
+            if (!consultation.getCounselorId().equals(getLoginId()) && !admin.isPresent()) {
             //if (!consultation.getCounselorId().equals(getLoginId()) || createTime < minTime) {
-                throw new ApiException("상담이력은 본인이 작성한 상담이력만 수정 가능합니다.");
+                throw new ApiException("상담이력은 관리자 또는 본인이 작성한 상담이력만 수정 가능합니다.");
             }
 
             consultation
