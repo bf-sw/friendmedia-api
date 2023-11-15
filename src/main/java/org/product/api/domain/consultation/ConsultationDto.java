@@ -185,7 +185,7 @@ public class ConsultationDto {
 
             if (isNotNull(complaint)) where.and(consultation.complaint.eq(complaint));
 
-            if (isNotNull(consultStatus)) where.and(consultation.consultStatus.eq(consultStatus));
+            if (isNotEmpty(consultStatus)) where.and(consultation.consultStatus.eq(consultStatus));
 
             where.and(consultation.deleted.eq(deleted));
             return where;

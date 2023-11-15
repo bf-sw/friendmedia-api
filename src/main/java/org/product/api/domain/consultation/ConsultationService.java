@@ -121,8 +121,6 @@ public class ConsultationService extends BaseService {
                     .setConsultDate(DateUtils.parseToEpochSecond(form.getConsultDate().replaceAll("-", "")))
                     .setDepartment(getDepartment())
                     .setCounselorType(getLoginType())
-                    .setCounselorId(getLoginId())
-                    .setCounselorNm(getName())
                     .setComplaint(form.getComplaint())
                     .setConsultStatus(form.getConsultStatus())
                     .setModifiedAt(DateUtils.getNow())
