@@ -39,6 +39,7 @@ public class AuthService extends BaseService {
     private AdminRepository adminRepository;
 
     public AuthDto.UserInfo gwLogin(AuthDto.LoginForm form) {
+
         try {
             Gson gson = new Gson();
 
@@ -67,14 +68,17 @@ public class AuthService extends BaseService {
             throw new ApiException("로그인 가능한 그룹웨어 정보가 없습니다.");
         } catch (ApiException e) {
             log.error("[AUTH][SERVICE][AuthService][gwLogin][ERROR]");
+            e.printStackTrace();
             throw e;
         } catch (Exception e) {
             log.error("[AUTH][SERVICE][AuthService][gwLogin][ERROR]");
+            e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }
     }
 
     public AuthDto.UserInfo imsiLogin(AuthDto.LoginForm form) {
+
         try {
             Gson gson = new Gson();
 
@@ -95,9 +99,11 @@ public class AuthService extends BaseService {
             }
         } catch (ApiException e) {
             log.error("[AUTH][SERVICE][AuthService][imsiLogin][ERROR]");
+            e.printStackTrace();
             throw e;
         } catch (Exception e) {
             log.error("[AUTH][SERVICE][AuthService][imsiLogin][ERROR]");
+            e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }
     }
@@ -106,11 +112,10 @@ public class AuthService extends BaseService {
         AuthDto.UserInfo userInfo = new AuthDto.UserInfo();
 
         try {
-
             Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(response.getLoginId());
 
             // 접속 가능 사용자로 등록된 직원만 접속 가능하도록 처리 - 인프라팀 정종영 주임 요청
-           if (!admin.isPresent()) {
+            if (!admin.isPresent()) {
                 throw new ApiException("접속이 허용되지 않은 직원입니다. 관리자에게 문의하시기 바랍니다.");
             }
 
@@ -124,9 +129,11 @@ public class AuthService extends BaseService {
 
         } catch (ApiException e) {
             log.error("[AUTH][SERVICE][AuthService][toBasicInfo][ERROR]");
+            e.printStackTrace();
             throw e;
         } catch (Exception e) {
             log.error("[AUTH][SERVICE][AuthService][toBasicInfo][ERROR]");
+            e.printStackTrace();
             throw new ApiException(ResponseStatus.ERROR);
         }
         return userInfo;
