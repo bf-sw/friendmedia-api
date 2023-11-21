@@ -105,16 +105,30 @@ public class AuthService extends BaseService {
     private AuthDto.UserInfo toBasicInfo(AuthDto.ApiUserInfo response) {
         AuthDto.UserInfo userInfo = new AuthDto.UserInfo();
 
-        userInfo
-                .setLoginType(response.getLoginType())
-                .setLoginId(response.getLoginId())
-                .setName(response.getName())
-                .setDepartment(response.getDeptName());
+        try {
 
-        Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(response.getLoginId());
+            Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(response.getLoginId());
 
-        userInfo.setAdmin(admin.isPresent());
+            // 접속 가능 사용자로 등록된 직원만 접속 가능하도록 처리 - 인프라팀 정종영 주임 요청
+           if (!admin.isPresent()) {
+                throw new ApiException("접속이 허용되지 않은 직원입니다. 관리자에게 문의하시기 바랍니다.");
+            }
 
+            userInfo
+                    .setLoginType(response.getLoginType())
+                    .setLoginId(response.getLoginId())
+                    .setName(response.getName())
+                    .setDepartment(response.getDeptName());
+
+            userInfo.setAdmin(admin.isPresent());
+
+        } catch (ApiException e) {
+            log.error("[AUTH][SERVICE][AuthService][toBasicInfo][ERROR]");
+            throw e;
+        } catch (Exception e) {
+            log.error("[AUTH][SERVICE][AuthService][toBasicInfo][ERROR]");
+            throw new ApiException(ResponseStatus.ERROR);
+        }
         return userInfo;
     }
 }
