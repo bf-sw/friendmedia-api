@@ -146,7 +146,7 @@ public class ConsultationService extends BaseService {
     public void deleteConsultation(ConsultationDto.DeleteForm form) {
 
         try {
-            log.info("[CONSULTATION][SERVICE][ConsultationService][deleteConsultation][form]", form.toString());
+            log.info("[CONSULTATION][SERVICE][ConsultationService][deleteConsultation][form] {}", form.toString());
 
             Optional<Consultation> consultationOptional = consultationRepository.findById(form.getId());
 
@@ -192,7 +192,7 @@ public class ConsultationService extends BaseService {
     public void deleteMultiConsultation(ConsultationDto.DeleteMultiForm forms) {
 
         try {
-            log.info("[CONSULTATION][SERVICE][ConsultationService][deleteMultiConsultation][forms]", forms.toString());
+            log.info("[CONSULTATION][SERVICE][ConsultationService][deleteMultiConsultation][forms] {}", forms.toString());
 
             Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(getLoginId());
 
@@ -288,6 +288,10 @@ public class ConsultationService extends BaseService {
     public List<ConsultationDto.BasicInfo> excel(ConsultationDto.SearchForm form, Pageable wholePage) {
 
         try {
+            log.info("[CONSULTATION][SERVICE][ConsultationService][excel][getLoginId] {}", getLoginId());
+            log.info("[CONSULTATION][SERVICE][ConsultationService][excel][getName] {}", getName());
+            log.info("[CONSULTATION][SERVICE][ConsultationService][excel][form] {}", form.toString());
+
             Page<Consultation> consultations = consultationRepository.findAll(form.getCondition(), wholePage);
             return consultations.getContent().stream().map(this::toBasicInfo).sorted(Comparator.comparing(ConsultationDto.BasicInfo::getCreatedAt)).collect(Collectors.toList());
         } catch (ApiException e) {
