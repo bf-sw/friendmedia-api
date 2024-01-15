@@ -140,6 +140,67 @@ public class ConsultationService extends BaseService {
     }
 
     /*
+     * 상담이력 멀티 수정
+     * */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateMultiConsultation(ConsultationDto.UpdateMultiForm form) {
+
+        try {
+            log.info("[CONSULTATION][SERVICE][ConsultationService][updateMultiConsultation][form]", form.toString());
+
+            List<String> ids = form.getIds();
+
+            ids.stream().forEach(id -> {
+                Optional<Consultation> consultationOptional = consultationRepository.findById(Long.valueOf(id));
+
+                if (!consultationOptional.isPresent()) {
+                    throw new ApiException("수정 가능한 상담이력이 없습니다.");
+                }
+
+                Consultation consultation = consultationOptional.get();
+
+                if (consultation.isDeleted()) {
+                    throw new ApiException("이미 삭제된 상담이력입니다.");
+                }
+
+                long minTime = DateUtils.fromLocalDateMin(DateUtils.getNowForLocalDate());
+                long createTime = consultation.getCreatedAt();
+
+                Optional<Admin> admin = adminRepository.findFirstByCounselorIdAndDeletedFalse(getLoginId());
+
+                // 상담이력은 본인이 작성한 상담이력만 수정 가능
+                // 당일 등록된 상담이력만 수정 가능 (해당기능 삭제 요청으로 주석처리)
+                // 관리자 수정 가능하도록 기능 수정
+                if (!consultation.getCounselorId().equals(getLoginId()) && !admin.isPresent()) {
+                    //if (!consultation.getCounselorId().equals(getLoginId()) || createTime < minTime) {
+                    throw new ApiException("상담이력은 관리자 또는 본인이 작성한 상담이력만 수정 가능합니다.");
+                }
+
+                consultation
+                        .setChannel(form.getChannel())
+                        .setInType(form.getInType())
+                        .setConsultType(form.getConsultType())
+                        .setLevel1(form.getLevel1())
+                        .setLevel2(form.getLevel2())
+                        .setCounselorType(getLoginType())
+                        .setConsultStatus(form.getConsultStatus())
+                        .setModifiedAt(DateUtils.getNow())
+                        .setModifiedBy(getName());
+
+                consultationRepository.save(consultation);
+            });
+        } catch (ApiException e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][updateMultiConsultation][ERROR]");
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            log.error("[CONSULTATION][SERVICE][ConsultationService][updateMultiConsultation][ERROR]");
+            e.printStackTrace();
+            throw new ApiException(ResponseStatus.ERROR);
+        }
+    }
+
+    /*
      * 상담이력 삭제
      * */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -314,6 +375,7 @@ public class ConsultationService extends BaseService {
                 .setName(consultation.getName())
                 .setPhone(consultation.getPhone())
                 .setOrderNo(consultation.getOrderNo())
+                .setGoodsNm(consultation.getGoodsNm())
                 .setChannel(consultation.getChannel())
                 .setInType(consultation.getInType())
                 .setConsultType(consultation.getConsultType())

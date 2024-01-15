@@ -33,6 +33,10 @@ public class ConsultationDto {
         @NotEmpty(message = "주문번호를 입력해주세요.")
         private String orderNo;
 
+        @ApiModelProperty(value = "상품명", notes = "", example = "상품명", required = false)
+        @NotEmpty(message = "상품명을 입력해주세요.")
+        private String goodsNm;
+
         @ApiModelProperty(value = "채널", notes = "", example = "", required = true)
         @NotEmpty(message = "채널을 입력해주세요.")
         private String channel;
@@ -73,6 +77,14 @@ public class ConsultationDto {
     @ApiModel("ConsultationDto-UpdateForm")
     public static class UpdateForm extends RegistryForm {
         private long id;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @NoArgsConstructor
+    @ApiModel("ConsultationDto-UpdateForm")
+    public static class UpdateMultiForm extends RegistryForm {
+        private List<String> ids;
     }
 
     @Data
@@ -120,6 +132,12 @@ public class ConsultationDto {
 
         @ApiModelProperty(value = "주문번호")
         String orderNo;
+
+        @ApiModelProperty(value = "상품명")
+        String goodsNm;
+
+        @ApiModelProperty(value = "상담이력")
+        String content;
 
         @ApiModelProperty(value = "채널")
         String channel;
@@ -171,6 +189,8 @@ public class ConsultationDto {
 
             if (isNotEmpty(orderNo)) where.and(consultation.orderNo.contains(orderNo));
 
+            if (isNotEmpty(goodsNm)) where.and(consultation.goodsNm.contains(goodsNm));
+
             if (isNotEmpty(channel)) where.and(consultation.channel.eq(channel));
 
             if (isNotEmpty(inType)) where.and(consultation.inType.eq(inType));
@@ -209,6 +229,9 @@ public class ConsultationDto {
 
         @ApiModelProperty(value = "주문번호", notes = "", example = "Z20200504738")
         private String orderNo;
+
+        @ApiModelProperty(value = "상품명", notes = "", example = "")
+        private String goodsNm;
 
         @ApiModelProperty(value = "채널", notes = "", example = "")
         private String channel;

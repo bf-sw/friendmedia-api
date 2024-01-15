@@ -38,6 +38,9 @@ public class Consultation {
     private String orderNo;
 
     @Column
+    private String goodsNm;
+
+    @Column
     private String channel;
 
     @Column
