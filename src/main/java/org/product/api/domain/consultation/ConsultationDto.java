@@ -73,6 +73,30 @@ public class ConsultationDto {
     @Data
     @Accessors(chain = true)
     @NoArgsConstructor
+    @ApiModel("ConsultationDto-MultiUpdateForm")
+    public static class MultiUpdateForm {
+        @ApiModelProperty(value = "채널", notes = "", example = "", required = false)
+        private String channel;
+
+        @ApiModelProperty(value = "인입유형", notes = "", example = "", required = false)
+        private String inType;
+
+        @ApiModelProperty(value = "상담유형 품목", notes = "", example = "", required = false)
+        private String consultType;
+
+        @ApiModelProperty(value = "상담유형 대분류", notes = "", example = "", required = false)
+        private String level1;
+
+        @ApiModelProperty(value = "상담유형 중분류", notes = "", example = "", required = false)
+        private String level2;
+
+        @ApiModelProperty(value = "상담 진행 상태", notes = "", example = "", required = true)
+        private String consultStatus;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @NoArgsConstructor
     @ApiModel("ConsultationDto-UpdateForm")
     public static class UpdateForm extends RegistryForm {
         private long id;
@@ -82,7 +106,7 @@ public class ConsultationDto {
     @Accessors(chain = true)
     @NoArgsConstructor
     @ApiModel("ConsultationDto-UpdateMultiForm")
-    public static class UpdateMultiForm extends RegistryForm {
+    public static class UpdateMultiForm extends MultiUpdateForm {
         private List<String> ids;
     }
 
