@@ -34,7 +34,6 @@ public class ConsultationDto {
         private String orderNo;
 
         @ApiModelProperty(value = "상품명", notes = "", example = "상품명", required = false)
-        @NotEmpty(message = "상품명을 입력해주세요.")
         private String goodsNm;
 
         @ApiModelProperty(value = "채널", notes = "", example = "", required = true)
@@ -82,7 +81,7 @@ public class ConsultationDto {
     @Data
     @Accessors(chain = true)
     @NoArgsConstructor
-    @ApiModel("ConsultationDto-UpdateForm")
+    @ApiModel("ConsultationDto-UpdateMultiForm")
     public static class UpdateMultiForm extends RegistryForm {
         private List<String> ids;
     }

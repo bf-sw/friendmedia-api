@@ -6,6 +6,7 @@ import org.product.api.domain.admin.Admin;
 import org.product.api.domain.admin.AdminRepository;
 import org.product.common.DateUtils;
 import org.product.common.ResponseStatus;
+import org.product.common.UtilManager;
 import org.product.exception.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -177,15 +178,27 @@ public class ConsultationService extends BaseService {
                 }
 
                 consultation
-                        .setChannel(form.getChannel())
-                        .setInType(form.getInType())
-                        .setConsultType(form.getConsultType())
-                        .setLevel1(form.getLevel1())
-                        .setLevel2(form.getLevel2())
-                        .setCounselorType(getLoginType())
-                        .setConsultStatus(form.getConsultStatus())
                         .setModifiedAt(DateUtils.getNow())
                         .setModifiedBy(getName());
+
+                if (UtilManager.isNotEmpty(form.getChannel())) {
+                    consultation.setChannel(form.getChannel());
+                }
+                if (UtilManager.isNotEmpty(form.getInType())) {
+                    consultation.setInType(form.getInType());
+                }
+                if (UtilManager.isNotEmpty(form.getConsultType())) {
+                    consultation.setConsultType(form.getConsultType());
+                }
+                if (UtilManager.isNotEmpty(form.getLevel1())) {
+                    consultation.setLevel1(form.getLevel1());
+                }
+                if (UtilManager.isNotEmpty(form.getLevel2())) {
+                    consultation.setLevel2(form.getLevel2());
+                }
+                if (UtilManager.isNotEmpty(form.getConsultStatus())) {
+                    consultation.setConsultStatus(form.getConsultStatus());
+                }
 
                 consultationRepository.save(consultation);
             });
