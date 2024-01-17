@@ -45,6 +45,7 @@ public class ConsultationService extends BaseService {
                     .setName(form.getName())
                     .setPhone(form.getPhone())
                     .setOrderNo(form.getOrderNo())
+                    .setGoodsNm(form.getGoodsNm())
                     .setChannel(form.getChannel())
                     .setInType(form.getInType())
                     .setConsultType(form.getConsultType())
@@ -113,6 +114,7 @@ public class ConsultationService extends BaseService {
                     .setName(form.getName())
                     .setPhone(form.getPhone())
                     .setOrderNo(form.getOrderNo())
+                    .setGoodsNm(form.getGoodsNm())
                     .setChannel(form.getChannel())
                     .setInType(form.getInType())
                     .setConsultType(form.getConsultType())
@@ -178,6 +180,7 @@ public class ConsultationService extends BaseService {
                 }
 
                 consultation
+                        .setLevel1(form.getLevel1())
                         .setModifiedAt(DateUtils.getNow())
                         .setModifiedBy(getName());
 
@@ -189,9 +192,6 @@ public class ConsultationService extends BaseService {
                 }
                 if (UtilManager.isNotEmpty(form.getConsultType())) {
                     consultation.setConsultType(form.getConsultType());
-                }
-                if (UtilManager.isNotEmpty(form.getLevel1())) {
-                    consultation.setLevel1(form.getLevel1());
                 }
                 if (UtilManager.isNotEmpty(form.getLevel2())) {
                     consultation.setLevel2(form.getLevel2());
