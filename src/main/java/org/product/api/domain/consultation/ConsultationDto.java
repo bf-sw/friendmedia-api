@@ -208,7 +208,7 @@ public class ConsultationDto {
 
             if (isNotEmpty(name)) where.and(consultation.name.contains(name));
 
-            if (isNotEmpty(phone)) where.and(consultation.phone.contains(phone));
+            if (isNotEmpty(phone)) where.and(consultation.phone.contains(phone.replaceAll("-", "")));
 
             if (isNotEmpty(orderNo)) where.and(consultation.orderNo.contains(orderNo));
 

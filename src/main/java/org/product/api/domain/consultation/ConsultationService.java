@@ -43,7 +43,6 @@ public class ConsultationService extends BaseService {
             Consultation consultation = new Consultation();
             consultation
                     .setName(form.getName())
-                    .setPhone(form.getPhone())
                     .setOrderNo(form.getOrderNo())
                     .setGoodsNm(form.getGoodsNm())
                     .setChannel(form.getChannel())
@@ -62,6 +61,10 @@ public class ConsultationService extends BaseService {
                     .setCreatedAt(DateUtils.getNow())
                     .setCreatedBy(getName())
                     .setDeleted(false);
+
+            if (UtilManager.isNotEmpty(form.getPhone())) {
+                consultation.setPhone(form.getPhone().replaceAll("-", ""));
+            }
 
             consultationRepository.save(consultation);
 
@@ -112,7 +115,6 @@ public class ConsultationService extends BaseService {
 
             consultation
                     .setName(form.getName())
-                    .setPhone(form.getPhone())
                     .setOrderNo(form.getOrderNo())
                     .setGoodsNm(form.getGoodsNm())
                     .setChannel(form.getChannel())
@@ -128,6 +130,10 @@ public class ConsultationService extends BaseService {
                     .setConsultStatus(form.getConsultStatus())
                     .setModifiedAt(DateUtils.getNow())
                     .setModifiedBy(getName());
+
+            if (UtilManager.isNotEmpty(form.getPhone())) {
+                consultation.setPhone(form.getPhone().replaceAll("-", ""));
+            }
 
             consultationRepository.save(consultation);
 
